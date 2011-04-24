@@ -1,7 +1,7 @@
 from flask import Flask
 from flaskext.sqlalchemy import SQLAlchemy
 from shoperone.model.core import *
-import hashlib
+from shoperone.lib import *
 
 db = SQLAlchemy()
 
@@ -13,7 +13,7 @@ def _init_model(app_name):
     app = Flask(app_name)
 
     # Debug mode allows arbitrary execution of code. Never run as True on prod.
-    app.debug = False
+    app.debug = True
 
     # Set the secret key.  keep this really secret:
     app.secret_key = 'Gr8A9/4j3Je J~XMM!j}mnL]WX/,:JT'
@@ -22,9 +22,7 @@ def _init_model(app_name):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/shoperone'
     db.init_app(app)
 
-    print "INIT MODEL"
     return app
-
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -34,6 +32,16 @@ class User(db.Model):
     password_hash = db.Column(db.String(64), nullable=False)
     picture_url = db.Column(db.String(2000), nullable=False)
     bio = db.Column(db.String(2000), nullable=False)
+
+    def __init__(self, first, last, email, password, picture_url=None, bio=None):
+        self.first_name = first
+        self.last_name = last
+        self.email = email
+        self.password_hash = _hash_password(password)
+        if picture_url is None:
+            self.picture_url = ""
+        if bio is None:
+            self.bio = ""
 
 
 class Listing(db.Model):

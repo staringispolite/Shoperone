@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import escape, redirect, request, session, url_for
 from shoperone import model
+from shoperone import lib
 
 app = model._init_model(__name__)
 
@@ -13,10 +14,8 @@ def index():
 def login():
     error = None
     if request.method == "POST":
-        print "got post"
         if _valid_login(request.form['email'],
                        request.form['password']):
-            print "is valid login"
             return _log_user_in(request.form['email'])
         else:
             error = "Invalid username/password"
@@ -32,10 +31,10 @@ def logout(email):
   Actually logs the user in.
 """
 def _log_user_in(email):
-    session['email'] = email
-    session['username'] = email
-    if 'username' in session:
-        return "Logged in as %s" % escape(session['username'])
+    user = model.User.query.filter_by(email=email).first()
+    if user:
+        session['user'] = user
+        return "Logged in as %s" % escape(session['user'].email)
     else:
         return "You are not logged in"
 
@@ -43,7 +42,9 @@ def _log_user_in(email):
   Returns true if the password hash matches that stored in the DB.
 """
 def _valid_login(email, password):
-    return True
+    user = model.User.query.filter_by(email=email).first()
+    password_hash = lib._hash_password(password) 
+    return user.password_hash == password_hash
 
 """
   Returns the HTML for the home page
@@ -58,7 +59,6 @@ def _render_index():
   Returns the HTML for the login page
 """
 def _render_login():
-    print "RENDERING LOGIN"
     return """
         login page!
         <form action="" method="post">
