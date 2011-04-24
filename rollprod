@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cmd="scp shoperone.py www@staringispolite.com:/var/www/www.getashoperone.com/"
+
+echo $cmd
+$cmd
+
