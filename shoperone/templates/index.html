@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+  {% if 'user' in session %}
+      Welcome back, {{ session['user'].first_name }} ({{ session['user'].email }})
+      <a href="logout">logout</a>
+  {% else %}
+      Hello world!
+      <a href="login">login</a>
+  {% endif %}
+{% endblock %}
+

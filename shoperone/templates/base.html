@@ -1,0 +1,23 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<script type="text/javascript" src="https://www.google.com/jsapi?key=ABQIAAAAonHekiqpO3T5zoSobfOpHhT4BO1SJfnlQK-yF6axR4AnZQJ32RQ2QwN4kurxntpZjHG-BbABnEYkuQ"></script>
+<script type="javascript" src="https://ajax.googleapis.com/ajax/libs/yui/3.3.0/build/yui/yui-min.js"></script>
+{% block head %}
+<title>{% block title %}{% endblock %}</title>
+{% endblock %}
+</head>
+
+<body>
+<div id="content">
+    {% block content %}{% endblock %}
+</div>
+<div id="footer">
+    {% block footer %}
+    &copy; me, 2011 
+    {% endblock %}
+</div>
+</body>
+
+</html>
