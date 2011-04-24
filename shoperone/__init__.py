@@ -1,15 +1,9 @@
 from flask import Flask
 from flask import escape, redirect, request, session, url_for
-import model
+from shoperone import model
 
-app = Flask(__name__)
+app = model._init_model(__name__)
 
-# Debug mode allows arbitrary execution of code. Never run as True on prod.
-app.debug = False
-# Set the secret key.  keep this really secret:
-app.secret_key = 'Gr8A9/4j3Je J~XMM!j}mnL]WX/,:JT'
-# Initialize the db
-model._init_model(app)
 
 @app.route("/")
 def index():
