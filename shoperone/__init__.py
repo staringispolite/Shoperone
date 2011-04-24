@@ -24,8 +24,9 @@ def login():
         return _render_login()
 
 @app.route("/logout")
-def logout(email):
-    return "goodbye"
+def logout():
+    session.pop('user', None)
+    return "goodbye. <a href='/'>back to the homepage</a>"
 
 """
   Actually logs the user in.
@@ -34,7 +35,7 @@ def _log_user_in(email):
     user = model.User.query.filter_by(email=email).first()
     if user:
         session['user'] = user
-        return "Logged in as %s" % escape(session['user'].email)
+        return redirect(url_for('index'))
     else:
         return "You are not logged in"
 
@@ -50,10 +51,17 @@ def _valid_login(email, password):
   Returns the HTML for the home page
 """
 def _render_index():
-  return """
+  html = """
     Hello world!
     <a href="login">login</a>
   """
+  if 'user' in session:
+      user = session['user']
+      html = """
+      Welcome back, %(first_name)s (%(email)s)
+      <a href="logout">logout</a>
+      """ % {'first_name': user.first_name, 'email': user.email} 
+  return html
 
 """
   Returns the HTML for the login page
